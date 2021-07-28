@@ -8,19 +8,24 @@ import com.example.demo.repositories.PurchaseRepository;
 
 @Service
 public class PurchaseService {
-	
+
 	@Autowired
-	private ProductService productService; 
-	
+	private ProductService productService;
+
+	@Autowired
+	private TransactionService transactionService;
+
 	@Autowired
 	private PurchaseRepository purchaseRepository;
-	
+
 	public double getTotalValue(Long productId, int qtd) {
 		var product = productService.findById(productId);
 		return product.getPrice() * qtd;
 	}
-	
+
 	public Purchase insert(Purchase obj) {
+		productService.findById(obj.getProductID());
+		transactionService.findById(obj.getTransactionID());
 		return purchaseRepository.save(obj);
 	}
 }

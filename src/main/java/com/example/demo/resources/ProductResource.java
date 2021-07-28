@@ -50,8 +50,8 @@ public class ProductResource {
 	@PostMapping
 	@ApiOperation(value = "Insert a new product in database")
 	public ResponseEntity<Product> insert(@RequestBody Product obj) {
-		obj = ProductService.insert(obj);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		var response = ProductService.insert(obj);
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
 	@DeleteMapping(value = "/{id}")

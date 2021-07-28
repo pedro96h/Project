@@ -1,6 +1,7 @@
 package com.example.demo.resources;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,12 +25,8 @@ public class PurchaseResource {
 
 	@PostMapping
 	public ResponseEntity<Purchase> insert(@RequestBody Purchase obj) {
-		obj = purchaseService.insert(obj);
-		if (obj == null) {
-			return ResponseEntity.noContent().build();
-		} else {
-			return ResponseEntity.ok(obj);
-		}
+		var response = purchaseService.insert(obj);
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
 }

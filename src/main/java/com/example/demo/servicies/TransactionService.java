@@ -38,4 +38,12 @@ public class TransactionService {
 
 	}
 
+	public Transaction findById(long transactionID) {
+		var optTransaction = transactionRepository.findById(transactionID);
+		if (optTransaction.isEmpty()) {
+			throw new ResourceNotFoundException(transactionID);
+		}
+		return optTransaction.get();
+	}
+
 }

@@ -7,14 +7,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import org.hibernate.annotations.ForeignKey;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.example.demo.servicies.PurchaseService;
-
 @Entity
 public class Purchase implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -23,7 +18,7 @@ public class Purchase implements Serializable {
 	private long productID;
 	private long transactionID;
 	private int qtd;
-	
+
 	public Purchase() {
 	}
 
