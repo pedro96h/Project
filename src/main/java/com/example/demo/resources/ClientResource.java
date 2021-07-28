@@ -70,7 +70,7 @@ public class ClientResource {
 	@PostMapping
 	@ApiOperation(value = "Insert a new client in database")
 	public ResponseEntity<Client> insert(@RequestBody Client obj) {
-		obj = clientService.insert(obj);
+		clientService.insert(obj);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 

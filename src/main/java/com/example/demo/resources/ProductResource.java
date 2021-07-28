@@ -3,6 +3,7 @@ package com.example.demo.resources;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,6 +34,9 @@ public class ProductResource {
 	@ApiOperation(value = "List all products")
 	public ResponseEntity<List<Product>> findAll() {
 		List<Product> list = ProductService.findAll();
+		if (list.isEmpty()) {
+			return ResponseEntity.noContent().build();
+		}
 		return ResponseEntity.ok().body(list);
 	}
 
@@ -40,23 +44,14 @@ public class ProductResource {
 	@ApiOperation(value = "Get Product by id")
 	public ResponseEntity<Product> findById(@PathVariable Long id) {
 		var objClient = ProductService.findById(id);
-		if (objClient != null) {
-			return ResponseEntity.ok().body(objClient);
-		} else {
-			return ResponseEntity.noContent().build();
-		}
+		return ResponseEntity.ok().body(objClient);
 	}
 
 	@PostMapping
 	@ApiOperation(value = "Insert a new product in database")
 	public ResponseEntity<Product> insert(@RequestBody Product obj) {
 		obj = ProductService.insert(obj);
-		if (obj == null) {
-			return ResponseEntity.noContent().build();
-		} else {
-			return ResponseEntity.ok(obj);
-		}
-
+		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
 	@DeleteMapping(value = "/{id}")

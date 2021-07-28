@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entities.Product;
+import com.example.demo.exceptions.entities.ResourceNotFoundException;
 import com.example.demo.repositories.ProductRepository;
 
 @Service
@@ -24,7 +25,7 @@ public class ProductService {
 		if (obj.isPresent()) {
 			return obj.get();
 		} else {
-			return null;
+			throw new ResourceNotFoundException(id);
 		}
 	}
 
@@ -33,23 +34,21 @@ public class ProductService {
 	}
 
 	public void delete(Long id) {
-		try {
-			Product entity = productRepository.getOne(id);
-			productRepository.deleteById(id);;
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
+		var optEntity = productRepository.findById(id);
+		if (optEntity.isEmpty()) {
+			throw new ResourceNotFoundException(id);
 		}
+		productRepository.deleteById(id);
 	}
 
 	public Product update(Long id, Product obj) {
-		try {
-			Product entity = productRepository.getOne(id);
-			updateData(entity, obj);
-			return productRepository.save(entity);
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			return null;
+		var optEntity = productRepository.findById(id);
+		if(optEntity.isEmpty()) {
+			throw new ResourceNotFoundException(id);
 		}
+		var entity = optEntity.get();
+		updateData(entity, obj);
+		return productRepository.save(entity);
 	}
 
 	private void updateData(Product entity, Product obj) {
