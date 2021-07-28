@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,20 +17,27 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.entities.Product;
 import com.example.demo.servicies.ProductService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping(value = "/api/products")
+@Api(value = "API REST Products")
+@CrossOrigin(origins = "*")
 public class ProductResource {
 
 	@Autowired
 	private ProductService ProductService;
 
 	@GetMapping
+	@ApiOperation(value = "List all products")
 	public ResponseEntity<List<Product>> findAll() {
 		List<Product> list = ProductService.findAll();
 		return ResponseEntity.ok().body(list);
 	}
 
 	@GetMapping(value = "/{id}")
+	@ApiOperation(value = "Get Product by id")
 	public ResponseEntity<Product> findById(@PathVariable Long id) {
 		var objClient = ProductService.findById(id);
 		if (objClient != null) {
@@ -40,6 +48,7 @@ public class ProductResource {
 	}
 
 	@PostMapping
+	@ApiOperation(value = "Insert a new product in database")
 	public ResponseEntity<Product> insert(@RequestBody Product obj) {
 		obj = ProductService.insert(obj);
 		if (obj == null) {
@@ -51,12 +60,14 @@ public class ProductResource {
 	}
 
 	@DeleteMapping(value = "/{id}")
+	@ApiOperation(value = "Delete a product by id")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		ProductService.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping(value = "/{id}")
+	@ApiOperation(value = "update a product")
 	public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody Product obj) {
 		obj = ProductService.update(id, obj);
 		return ResponseEntity.ok().body(obj);
