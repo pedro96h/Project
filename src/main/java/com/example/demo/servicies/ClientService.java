@@ -38,7 +38,7 @@ public class ClientService {
 	}
 
 	public Client findById(Long id) {
-		Optional<Client> obj = clientRepository.findById(id);
+		var obj = clientRepository.findById(id);
 		if (obj.isPresent()) {
 			return obj.get();
 		} else {
@@ -47,11 +47,19 @@ public class ClientService {
 	}
 
 	public Client findByCpf(String cpf) {
-		return clientRepository.findByCpf(cpf).get();
+		var optObject = clientRepository.findByCpf(cpf);
+		if(optObject.isPresent()) {
+			return optObject.get();
+		}
+		return null;
 	}
 
 	public Client findByEmail(String email) {
-		return clientRepository.findByEmail(email).get();
+		var optObject =  clientRepository.findByEmail(email);
+		if(optObject.isPresent()) {
+			return optObject.get();
+		}
+		return null;
 	}
 
 	public void delete(Long id) {

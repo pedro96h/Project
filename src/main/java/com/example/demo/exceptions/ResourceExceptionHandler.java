@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.example.demo.exceptions.entities.AuthenticatingEmailtException;
 import com.example.demo.exceptions.entities.DatabaseConstraintViolationException;
 import com.example.demo.exceptions.entities.NullPointException;
 import com.example.demo.exceptions.entities.ResourceAlreadyExistsException;
@@ -53,5 +54,15 @@ public class ResourceExceptionHandler {
 				request.getRequestURI());
 		return ResponseEntity.status(status).body(err);
 	}
+
+	@ExceptionHandler(AuthenticatingEmailtException.class)
+	public ResponseEntity<StandardError> AuthenticatingEmailtException(AuthenticatingEmailtException e, HttpServletRequest request) {
+		String error = "Authenticating emailt Faild";
+		HttpStatus status = HttpStatus.CONFLICT;
+		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(),
+				request.getRequestURI());
+		return ResponseEntity.status(status).body(err);
+	}
+	
 	
 }
