@@ -1,5 +1,7 @@
 package com.example.demo.servicies;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,5 +29,9 @@ public class PurchaseService {
 		productService.findById(obj.getProductID());
 		transactionService.findById(obj.getTransactionID());
 		return purchaseRepository.save(obj);
+	}
+
+	public List<Purchase> getById(Long id) {
+		return purchaseRepository.findByTransactionID(id);
 	}
 }

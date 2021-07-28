@@ -31,9 +31,16 @@ public class TransactionResource {
 	}
 
 	@GetMapping(value = "/confirTransaction/{id}")
-	@ApiOperation(value = "confir de transaction on database")
+	@ApiOperation(value = "confirm de transaction on database")
 	public ResponseEntity<Long> confirTransaction(@PathVariable Long id) {
 		transactionService.confirTransaction(id);
 		return ResponseEntity.ok().build();
+	}
+	
+	@GetMapping(value = "/totalvalue/{id}")
+	@ApiOperation(value = "get total value of transaction")
+	public ResponseEntity<Double> getTotalvalue(@PathVariable Long id) {
+		var total =transactionService.getTotalvalue(id);
+		return ResponseEntity.ok().body((Double)total);
 	}
 }

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.entities.Purchase;
 import com.example.demo.entities.Transaction;
 import com.example.demo.entities.enums.TrasactionStatus;
 import com.example.demo.exceptions.entities.ResourceNotFoundException;
@@ -15,6 +16,9 @@ public class TransactionService {
 
 	@Autowired
 	private TransactionRepository transactionRepository;
+
+	@Autowired
+	private PurchaseService purchaseService;
 
 	@Autowired
 	private ClientService clientService;
@@ -44,6 +48,18 @@ public class TransactionService {
 			throw new ResourceNotFoundException(transactionID);
 		}
 		return optTransaction.get();
+	}
+
+	public double getTotalvalue(Long id) {
+		var list = purchaseService.getById(id);
+		if (list.isEmpty()) {
+			throw new ResourceNotFoundException(id);
+		}
+		double total = 0.0;
+		for (Purchase p : list) {
+			total = purchaseService.getTotalValue(p.getProductID(), p.getQtd());
+		}
+		return total;
 	}
 
 }
