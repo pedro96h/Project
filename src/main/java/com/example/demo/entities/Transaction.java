@@ -1,17 +1,13 @@
 package com.example.demo.entities;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Transient;
 
-import org.hibernate.annotations.ForeignKey;
-import org.hibernate.resource.transaction.spi.TransactionStatus;
+import com.example.demo.entities.enums.TrasactionStatus;
 
 @Entity
 public class Transaction {
@@ -19,9 +15,48 @@ public class Transaction {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private LocalDateTime data;
-	@ForeignKey(name = "Client")
 	private long clientId;
-	private TransactionStatus transactionStatus;
-	@Transient
-	private Set<Purchase> purchases = new HashSet<>();
+	private TrasactionStatus transactionStatus;
+
+	public Transaction() {
+	}
+
+	public Transaction(LocalDateTime data, long clientId, TrasactionStatus transactionStatus) {
+		this.data = data;
+		this.clientId = clientId;
+		this.transactionStatus = transactionStatus;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public LocalDateTime getData() {
+		return data;
+	}
+
+	public void setData(LocalDateTime data) {
+		this.data = data;
+	}
+
+	public long getClientId() {
+		return clientId;
+	}
+
+	public void setClientId(long clientId) {
+		this.clientId = clientId;
+	}
+
+	public TrasactionStatus getTransactionStatus() {
+		return transactionStatus;
+	}
+
+	public void setTransactionStatus(TrasactionStatus transactionStatus) {
+		this.transactionStatus = transactionStatus;
+	}
+
 }
