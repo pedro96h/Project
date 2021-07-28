@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entities.Client;
+import com.example.demo.exceptions.entities.ResourceAlreadyExistsException;
+import com.example.demo.exceptions.entities.ResourceNotFoundException;
 import com.example.demo.repositories.ClientRepository;
-
-import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
 
 @Service
 public class ClientService {
@@ -28,9 +28,13 @@ public class ClientService {
 	public List<Client> findAllNotActiveClients() {
 		return clientRepository.findByActive(false);
 	}
-	
+
 	public Client insert(Client obj) {
-	  	return clientRepository.save(obj);
+		var client = clientRepository.findByCpf(obj.getCpf());
+		if (client.isEmpty()) {
+			return clientRepository.save(obj);
+		}
+		throw new ResourceAlreadyExistsException();
 	}
 
 	public Client findById(Long id) {
@@ -38,37 +42,36 @@ public class ClientService {
 		if (obj.isPresent()) {
 			return obj.get();
 		} else {
-			return null;
+			throw new ResourceNotFoundException(id);
 		}
 	}
-	
+
 	public Client findByCpf(String cpf) {
-		return clientRepository.findByCpf(cpf);
+		return clientRepository.findByCpf(cpf).get();
 	}
-	
+
 	public Client findByEmail(String email) {
-		return clientRepository.findByCpf(email);
+		return clientRepository.findByEmail(email);
 	}
 
 	public void delete(Long id) {
-		try {
-			Client entity = clientRepository.getOne(id);
-			entity.setActive(false);
-			clientRepository.save(entity);
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
+		var optEntity = clientRepository.findById(id);
+		if (optEntity.isEmpty()) {
+			throw new ResourceNotFoundException(id);
 		}
+		var entity = optEntity.get();
+		entity.setActive(false);
+		clientRepository.save(entity);
 	}
-	
+
 	public Client update(Long id, Client obj) {
-		try {
-			Client entity = clientRepository.getOne(id);
-			updateData(entity,obj);
-			return clientRepository.save(entity);	
-		} catch(Exception e) {
-			System.out.println(e.getMessage());
-			return null;
+		var optentity = clientRepository.findById(id);
+		if (optentity.isEmpty()) {
+			throw new ResourceNotFoundException(id);
 		}
+		var entity = optentity.get();
+		updateData(entity, obj);
+		return clientRepository.save(entity);
 	}
 
 	private void updateData(Client entity, Client obj) {
@@ -78,5 +81,4 @@ public class ClientService {
 		entity.setFirstAccess(false);
 		entity.setActive(true);
 	}
-
 }

@@ -3,6 +3,7 @@ package com.example.demo.resources;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,6 +34,9 @@ public class ClientResource {
 	@ApiOperation(value = "List all clients")
 	public ResponseEntity<List<Client>> findAll() {
 		List<Client> list = clientService.findAll();
+		if (list.isEmpty()) {
+			ResponseEntity.noContent().build();
+		}
 		return ResponseEntity.ok().body(list);
 	}
 
@@ -40,6 +44,9 @@ public class ClientResource {
 	@ApiOperation(value = "List all activated clients")
 	public ResponseEntity<List<Client>> findAllActiveClients() {
 		List<Client> list = clientService.findAllActiveClients();
+		if (list.isEmpty()) {
+			ResponseEntity.noContent().build();
+		}
 		return ResponseEntity.ok().body(list);
 	}
 
@@ -47,6 +54,9 @@ public class ClientResource {
 	@ApiOperation(value = "List all not activated clients")
 	public ResponseEntity<List<Client>> findAllNotActiveClients() {
 		List<Client> list = clientService.findAllNotActiveClients();
+		if (list.isEmpty()) {
+			ResponseEntity.noContent().build();
+		}
 		return ResponseEntity.ok().body(list);
 	}
 
@@ -54,22 +64,14 @@ public class ClientResource {
 	@ApiOperation(value = "Get a client by id")
 	public ResponseEntity<Client> findById(@PathVariable Long id) {
 		var objClient = clientService.findById(id);
-		if (objClient != null) {
-			return ResponseEntity.ok().body(objClient);
-		} else {
-			return ResponseEntity.noContent().build();
-		}
+		return ResponseEntity.ok().body(objClient);
 	}
 
 	@PostMapping
 	@ApiOperation(value = "Insert a new client in database")
 	public ResponseEntity<Client> insert(@RequestBody Client obj) {
 		obj = clientService.insert(obj);
-		if (obj == null) {
-			return ResponseEntity.noContent().build();
-		} else {
-			return ResponseEntity.ok(obj);
-		}
+		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
 	@DeleteMapping(value = "/{id}")
