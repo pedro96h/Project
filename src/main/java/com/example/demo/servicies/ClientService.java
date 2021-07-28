@@ -1,7 +1,6 @@
 package com.example.demo.servicies;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,15 +47,15 @@ public class ClientService {
 
 	public Client findByCpf(String cpf) {
 		var optObject = clientRepository.findByCpf(cpf);
-		if(optObject.isPresent()) {
+		if (optObject.isPresent()) {
 			return optObject.get();
 		}
 		return null;
 	}
 
 	public Client findByEmail(String email) {
-		var optObject =  clientRepository.findByEmail(email);
-		if(optObject.isPresent()) {
+		var optObject = clientRepository.findByEmail(email);
+		if (optObject.isPresent()) {
 			return optObject.get();
 		}
 		return null;

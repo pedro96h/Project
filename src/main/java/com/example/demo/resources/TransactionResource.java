@@ -19,24 +19,21 @@ import io.swagger.annotations.ApiOperation;
 @Api(value = "API REST Transaction")
 @CrossOrigin(origins = "*")
 public class TransactionResource {
-	
+
 	@Autowired
 	private TransactionService transactionService;
 
-	@GetMapping(value = "/{clientId}")
+	@GetMapping(value = "/getTransactionId/{clientId}")
 	@ApiOperation(value = "returns a transaction id")
 	public ResponseEntity<Long> getTransactionId(@PathVariable Long clientId) {
 		Transaction transaction = transactionService.getTransactionId(clientId);
 		return ResponseEntity.ok().body(transaction.getId());
 	}
-	
-	@GetMapping(value = "/{id}")
+
+	@GetMapping(value = "/confirTransaction/{id}")
 	@ApiOperation(value = "confir de transaction on database")
 	public ResponseEntity<Long> confirTransaction(@PathVariable Long id) {
-		boolean response = transactionService.confirTransaction(id);
-		if(response) {
-			return ResponseEntity.ok().build();	
-		}
-		return ResponseEntity.noContent().build();
+		transactionService.confirTransaction(id);
+		return ResponseEntity.ok().build();
 	}
 }

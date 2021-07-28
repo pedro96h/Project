@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.entities.Client;
 import com.example.demo.entities.dto.FistAccessDto;
-import com.example.demo.exceptions.entities.NullPointException;
 import com.example.demo.exceptions.entities.ResourceAlreadyExistsException;
 import com.example.demo.util.ReadDocTxt;
 import com.example.demo.util.SendEmail;
